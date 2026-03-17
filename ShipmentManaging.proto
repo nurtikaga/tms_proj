@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package tmsmanagerpb.v1;
+
+option go_package = "github.com/nurtikaga/tms-proj/tms-protos/go;tmsmanagerpb";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service ShipmentService {
+  rpc CreateShipment(CreateShipmentRequest) returns (ShipmentResponse);
+  rpc GetShipment(GetShipmentRequest)       returns (ShipmentResponse);
+  rpc AddEvent(AddEventRequest)             returns (google.protobuf.Empty);
+  rpc GetHistory(GetHistoryRequest)         returns (HistoryResponse);
+}
+
+message CreateShipmentRequest {
+  string origin      = 1;
+  string destination = 2;
+}
+
+message GetShipmentRequest {
+  string id = 1;
+}
+
+message AddEventRequest {
+  string         shipment_id = 1;
+  ShipmentStatus status      = 2;
+  string         note        = 3;
+}
+
+message GetHistoryRequest {
+  string shipment_id = 1;
+}
+
+message ShipmentResponse {
+  string                    id         = 1;
+  ShipmentStatus            status     = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+message HistoryResponse {
+  repeated ShipmentEvent events = 1;
+}
+
+message ShipmentEvent {
+  ShipmentStatus            status    = 1;
+  string                    note      = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+enum ShipmentStatus {
+  SHIPMENT_STATUS_UNSPECIFIED = 0;
+  SHIPMENT_STATUS_CREATED     = 1;
+  SHIPMENT_STATUS_PICKED_UP   = 2;
+  SHIPMENT_STATUS_IN_TRANSIT  = 3;
+  SHIPMENT_STATUS_DELIVERED   = 4;
+}
