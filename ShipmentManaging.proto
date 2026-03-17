@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package tmsmanagerpb.v1;
 
-option go_package = "github.com/nurtikaga/tms-proj/tms-protos/go;tmsmanagerpb";
+option go_package = "github.com/nurtikaga/tms_proj/tms-protos/go;tmsmanagerpb";
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
@@ -15,8 +15,13 @@ service ShipmentService {
 }
 
 message CreateShipmentRequest {
-  string origin      = 1;
-  string destination = 2;
+  string reference_number = 1;
+  string origin           = 2;
+  string destination      = 3;
+  string driver_name      = 4;
+  string unit_number      = 5;
+  double shipment_amount  = 6;
+  double driver_revenue   = 7;
 }
 
 message GetShipmentRequest {
@@ -34,9 +39,17 @@ message GetHistoryRequest {
 }
 
 message ShipmentResponse {
-  string                    id         = 1;
-  ShipmentStatus            status     = 2;
-  google.protobuf.Timestamp created_at = 3;
+  string                    id               = 1;
+  string                    reference_number = 2;
+  string                    origin           = 3;
+  string                    destination      = 4;
+  ShipmentStatus            status           = 5;
+  string                    driver_name      = 6;
+  string                    unit_number      = 7;
+  double                    shipment_amount  = 8;
+  double                    driver_revenue   = 9;
+  google.protobuf.Timestamp created_at       = 10;
+  google.protobuf.Timestamp updated_at       = 11;
 }
 
 message HistoryResponse {
@@ -44,14 +57,15 @@ message HistoryResponse {
 }
 
 message ShipmentEvent {
-  ShipmentStatus            status    = 1;
-  string                    note      = 2;
-  google.protobuf.Timestamp timestamp = 3;
+  string                    id          = 1;
+  ShipmentStatus            status      = 2;
+  string                    note        = 3;
+  google.protobuf.Timestamp occurred_at = 4;
 }
 
 enum ShipmentStatus {
   SHIPMENT_STATUS_UNSPECIFIED = 0;
-  SHIPMENT_STATUS_CREATED     = 1;
+  SHIPMENT_STATUS_PENDING     = 1;
   SHIPMENT_STATUS_PICKED_UP   = 2;
   SHIPMENT_STATUS_IN_TRANSIT  = 3;
   SHIPMENT_STATUS_DELIVERED   = 4;

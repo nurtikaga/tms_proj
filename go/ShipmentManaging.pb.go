@@ -27,7 +27,7 @@ type ShipmentStatus int32
 
 const (
 	ShipmentStatus_SHIPMENT_STATUS_UNSPECIFIED ShipmentStatus = 0
-	ShipmentStatus_SHIPMENT_STATUS_CREATED     ShipmentStatus = 1
+	ShipmentStatus_SHIPMENT_STATUS_PENDING     ShipmentStatus = 1
 	ShipmentStatus_SHIPMENT_STATUS_PICKED_UP   ShipmentStatus = 2
 	ShipmentStatus_SHIPMENT_STATUS_IN_TRANSIT  ShipmentStatus = 3
 	ShipmentStatus_SHIPMENT_STATUS_DELIVERED   ShipmentStatus = 4
@@ -37,14 +37,14 @@ const (
 var (
 	ShipmentStatus_name = map[int32]string{
 		0: "SHIPMENT_STATUS_UNSPECIFIED",
-		1: "SHIPMENT_STATUS_CREATED",
+		1: "SHIPMENT_STATUS_PENDING",
 		2: "SHIPMENT_STATUS_PICKED_UP",
 		3: "SHIPMENT_STATUS_IN_TRANSIT",
 		4: "SHIPMENT_STATUS_DELIVERED",
 	}
 	ShipmentStatus_value = map[string]int32{
 		"SHIPMENT_STATUS_UNSPECIFIED": 0,
-		"SHIPMENT_STATUS_CREATED":     1,
+		"SHIPMENT_STATUS_PENDING":     1,
 		"SHIPMENT_STATUS_PICKED_UP":   2,
 		"SHIPMENT_STATUS_IN_TRANSIT":  3,
 		"SHIPMENT_STATUS_DELIVERED":   4,
@@ -79,11 +79,16 @@ func (ShipmentStatus) EnumDescriptor() ([]byte, []int) {
 }
 
 type CreateShipmentRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
-	Destination   string                 `protobuf:"bytes,2,opt,name=destination,proto3" json:"destination,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ReferenceNumber string                 `protobuf:"bytes,1,opt,name=reference_number,json=referenceNumber,proto3" json:"reference_number,omitempty"`
+	Origin          string                 `protobuf:"bytes,2,opt,name=origin,proto3" json:"origin,omitempty"`
+	Destination     string                 `protobuf:"bytes,3,opt,name=destination,proto3" json:"destination,omitempty"`
+	DriverName      string                 `protobuf:"bytes,4,opt,name=driver_name,json=driverName,proto3" json:"driver_name,omitempty"`
+	UnitNumber      string                 `protobuf:"bytes,5,opt,name=unit_number,json=unitNumber,proto3" json:"unit_number,omitempty"`
+	ShipmentAmount  float64                `protobuf:"fixed64,6,opt,name=shipment_amount,json=shipmentAmount,proto3" json:"shipment_amount,omitempty"`
+	DriverRevenue   float64                `protobuf:"fixed64,7,opt,name=driver_revenue,json=driverRevenue,proto3" json:"driver_revenue,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *CreateShipmentRequest) Reset() {
@@ -116,6 +121,13 @@ func (*CreateShipmentRequest) Descriptor() ([]byte, []int) {
 	return file_ShipmentManaging_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *CreateShipmentRequest) GetReferenceNumber() string {
+	if x != nil {
+		return x.ReferenceNumber
+	}
+	return ""
+}
+
 func (x *CreateShipmentRequest) GetOrigin() string {
 	if x != nil {
 		return x.Origin
@@ -128,6 +140,34 @@ func (x *CreateShipmentRequest) GetDestination() string {
 		return x.Destination
 	}
 	return ""
+}
+
+func (x *CreateShipmentRequest) GetDriverName() string {
+	if x != nil {
+		return x.DriverName
+	}
+	return ""
+}
+
+func (x *CreateShipmentRequest) GetUnitNumber() string {
+	if x != nil {
+		return x.UnitNumber
+	}
+	return ""
+}
+
+func (x *CreateShipmentRequest) GetShipmentAmount() float64 {
+	if x != nil {
+		return x.ShipmentAmount
+	}
+	return 0
+}
+
+func (x *CreateShipmentRequest) GetDriverRevenue() float64 {
+	if x != nil {
+		return x.DriverRevenue
+	}
+	return 0
 }
 
 type GetShipmentRequest struct {
@@ -279,12 +319,20 @@ func (x *GetHistoryRequest) GetShipmentId() string {
 }
 
 type ShipmentResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Status        ShipmentStatus         `protobuf:"varint,2,opt,name=status,proto3,enum=tmsmanagerpb.v1.ShipmentStatus" json:"status,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ReferenceNumber string                 `protobuf:"bytes,2,opt,name=reference_number,json=referenceNumber,proto3" json:"reference_number,omitempty"`
+	Origin          string                 `protobuf:"bytes,3,opt,name=origin,proto3" json:"origin,omitempty"`
+	Destination     string                 `protobuf:"bytes,4,opt,name=destination,proto3" json:"destination,omitempty"`
+	Status          ShipmentStatus         `protobuf:"varint,5,opt,name=status,proto3,enum=tmsmanagerpb.v1.ShipmentStatus" json:"status,omitempty"`
+	DriverName      string                 `protobuf:"bytes,6,opt,name=driver_name,json=driverName,proto3" json:"driver_name,omitempty"`
+	UnitNumber      string                 `protobuf:"bytes,7,opt,name=unit_number,json=unitNumber,proto3" json:"unit_number,omitempty"`
+	ShipmentAmount  float64                `protobuf:"fixed64,8,opt,name=shipment_amount,json=shipmentAmount,proto3" json:"shipment_amount,omitempty"`
+	DriverRevenue   float64                `protobuf:"fixed64,9,opt,name=driver_revenue,json=driverRevenue,proto3" json:"driver_revenue,omitempty"`
+	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *ShipmentResponse) Reset() {
@@ -324,6 +372,27 @@ func (x *ShipmentResponse) GetId() string {
 	return ""
 }
 
+func (x *ShipmentResponse) GetReferenceNumber() string {
+	if x != nil {
+		return x.ReferenceNumber
+	}
+	return ""
+}
+
+func (x *ShipmentResponse) GetOrigin() string {
+	if x != nil {
+		return x.Origin
+	}
+	return ""
+}
+
+func (x *ShipmentResponse) GetDestination() string {
+	if x != nil {
+		return x.Destination
+	}
+	return ""
+}
+
 func (x *ShipmentResponse) GetStatus() ShipmentStatus {
 	if x != nil {
 		return x.Status
@@ -331,9 +400,44 @@ func (x *ShipmentResponse) GetStatus() ShipmentStatus {
 	return ShipmentStatus_SHIPMENT_STATUS_UNSPECIFIED
 }
 
+func (x *ShipmentResponse) GetDriverName() string {
+	if x != nil {
+		return x.DriverName
+	}
+	return ""
+}
+
+func (x *ShipmentResponse) GetUnitNumber() string {
+	if x != nil {
+		return x.UnitNumber
+	}
+	return ""
+}
+
+func (x *ShipmentResponse) GetShipmentAmount() float64 {
+	if x != nil {
+		return x.ShipmentAmount
+	}
+	return 0
+}
+
+func (x *ShipmentResponse) GetDriverRevenue() float64 {
+	if x != nil {
+		return x.DriverRevenue
+	}
+	return 0
+}
+
 func (x *ShipmentResponse) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *ShipmentResponse) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
 	}
 	return nil
 }
@@ -384,9 +488,10 @@ func (x *HistoryResponse) GetEvents() []*ShipmentEvent {
 
 type ShipmentEvent struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        ShipmentStatus         `protobuf:"varint,1,opt,name=status,proto3,enum=tmsmanagerpb.v1.ShipmentStatus" json:"status,omitempty"`
-	Note          string                 `protobuf:"bytes,2,opt,name=note,proto3" json:"note,omitempty"`
-	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Status        ShipmentStatus         `protobuf:"varint,2,opt,name=status,proto3,enum=tmsmanagerpb.v1.ShipmentStatus" json:"status,omitempty"`
+	Note          string                 `protobuf:"bytes,3,opt,name=note,proto3" json:"note,omitempty"`
+	OccurredAt    *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -421,6 +526,13 @@ func (*ShipmentEvent) Descriptor() ([]byte, []int) {
 	return file_ShipmentManaging_proto_rawDescGZIP(), []int{6}
 }
 
+func (x *ShipmentEvent) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 func (x *ShipmentEvent) GetStatus() ShipmentStatus {
 	if x != nil {
 		return x.Status
@@ -435,9 +547,9 @@ func (x *ShipmentEvent) GetNote() string {
 	return ""
 }
 
-func (x *ShipmentEvent) GetTimestamp() *timestamppb.Timestamp {
+func (x *ShipmentEvent) GetOccurredAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.Timestamp
+		return x.OccurredAt
 	}
 	return nil
 }
@@ -446,10 +558,17 @@ var File_ShipmentManaging_proto protoreflect.FileDescriptor
 
 const file_ShipmentManaging_proto_rawDesc = "" +
 	"\n" +
-	"\x16ShipmentManaging.proto\x12\x0ftmsmanagerpb.v1\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"Q\n" +
-	"\x15CreateShipmentRequest\x12\x16\n" +
-	"\x06origin\x18\x01 \x01(\tR\x06origin\x12 \n" +
-	"\vdestination\x18\x02 \x01(\tR\vdestination\"$\n" +
+	"\x16ShipmentManaging.proto\x12\x0ftmsmanagerpb.v1\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8e\x02\n" +
+	"\x15CreateShipmentRequest\x12)\n" +
+	"\x10reference_number\x18\x01 \x01(\tR\x0freferenceNumber\x12\x16\n" +
+	"\x06origin\x18\x02 \x01(\tR\x06origin\x12 \n" +
+	"\vdestination\x18\x03 \x01(\tR\vdestination\x12\x1f\n" +
+	"\vdriver_name\x18\x04 \x01(\tR\n" +
+	"driverName\x12\x1f\n" +
+	"\vunit_number\x18\x05 \x01(\tR\n" +
+	"unitNumber\x12'\n" +
+	"\x0fshipment_amount\x18\x06 \x01(\x01R\x0eshipmentAmount\x12%\n" +
+	"\x0edriver_revenue\x18\a \x01(\x01R\rdriverRevenue\"$\n" +
 	"\x12GetShipmentRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"\x7f\n" +
 	"\x0fAddEventRequest\x12\x1f\n" +
@@ -459,21 +578,35 @@ const file_ShipmentManaging_proto_rawDesc = "" +
 	"\x04note\x18\x03 \x01(\tR\x04note\"4\n" +
 	"\x11GetHistoryRequest\x12\x1f\n" +
 	"\vshipment_id\x18\x01 \x01(\tR\n" +
-	"shipmentId\"\x96\x01\n" +
+	"shipmentId\"\xc8\x03\n" +
 	"\x10ShipmentResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x127\n" +
-	"\x06status\x18\x02 \x01(\x0e2\x1f.tmsmanagerpb.v1.ShipmentStatusR\x06status\x129\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
+	"\x10reference_number\x18\x02 \x01(\tR\x0freferenceNumber\x12\x16\n" +
+	"\x06origin\x18\x03 \x01(\tR\x06origin\x12 \n" +
+	"\vdestination\x18\x04 \x01(\tR\vdestination\x127\n" +
+	"\x06status\x18\x05 \x01(\x0e2\x1f.tmsmanagerpb.v1.ShipmentStatusR\x06status\x12\x1f\n" +
+	"\vdriver_name\x18\x06 \x01(\tR\n" +
+	"driverName\x12\x1f\n" +
+	"\vunit_number\x18\a \x01(\tR\n" +
+	"unitNumber\x12'\n" +
+	"\x0fshipment_amount\x18\b \x01(\x01R\x0eshipmentAmount\x12%\n" +
+	"\x0edriver_revenue\x18\t \x01(\x01R\rdriverRevenue\x129\n" +
 	"\n" +
-	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"I\n" +
+	"created_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"I\n" +
 	"\x0fHistoryResponse\x126\n" +
-	"\x06events\x18\x01 \x03(\v2\x1e.tmsmanagerpb.v1.ShipmentEventR\x06events\"\x96\x01\n" +
-	"\rShipmentEvent\x127\n" +
-	"\x06status\x18\x01 \x01(\x0e2\x1f.tmsmanagerpb.v1.ShipmentStatusR\x06status\x12\x12\n" +
-	"\x04note\x18\x02 \x01(\tR\x04note\x128\n" +
-	"\ttimestamp\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp*\xac\x01\n" +
+	"\x06events\x18\x01 \x03(\v2\x1e.tmsmanagerpb.v1.ShipmentEventR\x06events\"\xa9\x01\n" +
+	"\rShipmentEvent\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x127\n" +
+	"\x06status\x18\x02 \x01(\x0e2\x1f.tmsmanagerpb.v1.ShipmentStatusR\x06status\x12\x12\n" +
+	"\x04note\x18\x03 \x01(\tR\x04note\x12;\n" +
+	"\voccurred_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"occurredAt*\xac\x01\n" +
 	"\x0eShipmentStatus\x12\x1f\n" +
 	"\x1bSHIPMENT_STATUS_UNSPECIFIED\x10\x00\x12\x1b\n" +
-	"\x17SHIPMENT_STATUS_CREATED\x10\x01\x12\x1d\n" +
+	"\x17SHIPMENT_STATUS_PENDING\x10\x01\x12\x1d\n" +
 	"\x19SHIPMENT_STATUS_PICKED_UP\x10\x02\x12\x1e\n" +
 	"\x1aSHIPMENT_STATUS_IN_TRANSIT\x10\x03\x12\x1d\n" +
 	"\x19SHIPMENT_STATUS_DELIVERED\x10\x042\xdf\x02\n" +
@@ -482,7 +615,7 @@ const file_ShipmentManaging_proto_rawDesc = "" +
 	"\vGetShipment\x12#.tmsmanagerpb.v1.GetShipmentRequest\x1a!.tmsmanagerpb.v1.ShipmentResponse\x12D\n" +
 	"\bAddEvent\x12 .tmsmanagerpb.v1.AddEventRequest\x1a\x16.google.protobuf.Empty\x12R\n" +
 	"\n" +
-	"GetHistory\x12\".tmsmanagerpb.v1.GetHistoryRequest\x1a .tmsmanagerpb.v1.HistoryResponseB:Z8github.com/nurtikaga/tms-proj/tms-protos/go;tmsmanagerpbb\x06proto3"
+	"GetHistory\x12\".tmsmanagerpb.v1.GetHistoryRequest\x1a .tmsmanagerpb.v1.HistoryResponseB:Z8github.com/nurtikaga/tms_proj/tms-protos/go;tmsmanagerpbb\x06proto3"
 
 var (
 	file_ShipmentManaging_proto_rawDescOnce sync.Once
@@ -514,22 +647,23 @@ var file_ShipmentManaging_proto_depIdxs = []int32{
 	0,  // 0: tmsmanagerpb.v1.AddEventRequest.status:type_name -> tmsmanagerpb.v1.ShipmentStatus
 	0,  // 1: tmsmanagerpb.v1.ShipmentResponse.status:type_name -> tmsmanagerpb.v1.ShipmentStatus
 	8,  // 2: tmsmanagerpb.v1.ShipmentResponse.created_at:type_name -> google.protobuf.Timestamp
-	7,  // 3: tmsmanagerpb.v1.HistoryResponse.events:type_name -> tmsmanagerpb.v1.ShipmentEvent
-	0,  // 4: tmsmanagerpb.v1.ShipmentEvent.status:type_name -> tmsmanagerpb.v1.ShipmentStatus
-	8,  // 5: tmsmanagerpb.v1.ShipmentEvent.timestamp:type_name -> google.protobuf.Timestamp
-	1,  // 6: tmsmanagerpb.v1.ShipmentService.CreateShipment:input_type -> tmsmanagerpb.v1.CreateShipmentRequest
-	2,  // 7: tmsmanagerpb.v1.ShipmentService.GetShipment:input_type -> tmsmanagerpb.v1.GetShipmentRequest
-	3,  // 8: tmsmanagerpb.v1.ShipmentService.AddEvent:input_type -> tmsmanagerpb.v1.AddEventRequest
-	4,  // 9: tmsmanagerpb.v1.ShipmentService.GetHistory:input_type -> tmsmanagerpb.v1.GetHistoryRequest
-	5,  // 10: tmsmanagerpb.v1.ShipmentService.CreateShipment:output_type -> tmsmanagerpb.v1.ShipmentResponse
-	5,  // 11: tmsmanagerpb.v1.ShipmentService.GetShipment:output_type -> tmsmanagerpb.v1.ShipmentResponse
-	9,  // 12: tmsmanagerpb.v1.ShipmentService.AddEvent:output_type -> google.protobuf.Empty
-	6,  // 13: tmsmanagerpb.v1.ShipmentService.GetHistory:output_type -> tmsmanagerpb.v1.HistoryResponse
-	10, // [10:14] is the sub-list for method output_type
-	6,  // [6:10] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	8,  // 3: tmsmanagerpb.v1.ShipmentResponse.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 4: tmsmanagerpb.v1.HistoryResponse.events:type_name -> tmsmanagerpb.v1.ShipmentEvent
+	0,  // 5: tmsmanagerpb.v1.ShipmentEvent.status:type_name -> tmsmanagerpb.v1.ShipmentStatus
+	8,  // 6: tmsmanagerpb.v1.ShipmentEvent.occurred_at:type_name -> google.protobuf.Timestamp
+	1,  // 7: tmsmanagerpb.v1.ShipmentService.CreateShipment:input_type -> tmsmanagerpb.v1.CreateShipmentRequest
+	2,  // 8: tmsmanagerpb.v1.ShipmentService.GetShipment:input_type -> tmsmanagerpb.v1.GetShipmentRequest
+	3,  // 9: tmsmanagerpb.v1.ShipmentService.AddEvent:input_type -> tmsmanagerpb.v1.AddEventRequest
+	4,  // 10: tmsmanagerpb.v1.ShipmentService.GetHistory:input_type -> tmsmanagerpb.v1.GetHistoryRequest
+	5,  // 11: tmsmanagerpb.v1.ShipmentService.CreateShipment:output_type -> tmsmanagerpb.v1.ShipmentResponse
+	5,  // 12: tmsmanagerpb.v1.ShipmentService.GetShipment:output_type -> tmsmanagerpb.v1.ShipmentResponse
+	9,  // 13: tmsmanagerpb.v1.ShipmentService.AddEvent:output_type -> google.protobuf.Empty
+	6,  // 14: tmsmanagerpb.v1.ShipmentService.GetHistory:output_type -> tmsmanagerpb.v1.HistoryResponse
+	11, // [11:15] is the sub-list for method output_type
+	7,  // [7:11] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_ShipmentManaging_proto_init() }
