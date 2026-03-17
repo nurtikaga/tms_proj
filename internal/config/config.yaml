@@ -1,0 +1,17 @@
+grpc:
+  port: 50051
+
+postgres:
+  dsn: "postgres://tms:tms@localhost:5432/tms?sslmode=disable"
+
+redis:
+  addr: "localhost:6379"
+  password: ""
+  db: 0
+
+kafka:
+  broker_addr: "localhost:9092"
+  topic: "shipment-events"
+
+log:
+  level: "info"
